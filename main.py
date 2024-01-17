@@ -6,6 +6,7 @@ from platforms import *
 from player_dino import *
 from cactuses import *
 from fire import *
+from door import *
 
 
 pygame.init()
@@ -66,7 +67,7 @@ def main():
         "                                                                                                                        ",
         "                     /                                 --------                       ----------       /                ",
         "                   ------                                                                            --------           ",
-        "    ------ *                        --------                        *---------                                          ",
+        "    ------ *                        --------                        *---------                                   @      ",
         "------------------------------------------------------------------------------------------------------------------------"]
 
     timer = pygame.time.Clock()
@@ -81,6 +82,10 @@ def main():
                 ct = Cactus(x, y)
                 entities.add(ct)
                 platforms.append(ct)
+            if col == '@':
+                dr = Door(x, y)
+                entities.add(dr)
+                platforms.append(dr)
             if col == '/':
                 mn = Fire(x, y, 2, 3, 150, 15)
                 entities.add(mn)
@@ -153,6 +158,7 @@ def draw_screensaver(screen):
 
 
 def draw_menu(screen):
+    screen = pygame.display.set_mode((640, 480))
     while True:
         screen.blit(lvl_image, (0, 0))
         for event in pygame.event.get():

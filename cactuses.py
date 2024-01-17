@@ -11,8 +11,3 @@ class Cactus(Platform):
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
-
-    def teleporting(self, goX, goY):
-        self.rect.x = goX
-        self.rect.y = goY
-# ,,

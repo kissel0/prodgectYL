@@ -1,5 +1,8 @@
 from pygame import *
 import pyganim
+from cactuses import *
+from door import *
+from main import draw_menu
 
 MOVE_SPEED = 7
 WIDTH = 22
@@ -67,7 +70,7 @@ class Player(sprite.Sprite):
         if not self.onGround:
             self.yvel += GRAVITY
 
-        self.onGround = False;  # Мы не знаем, когда мы на земле((
+        self.onGround = False  # Мы не знаем, когда мы на земле((
         self.rect.y += self.yvel
         self.collide(0, self.yvel, platforms)
 
@@ -77,18 +80,30 @@ class Player(sprite.Sprite):
     def collide(self, xvel, yvel, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
+                if isinstance(p, Door):
+                    draw_menu(screen)
+                if isinstance(p, Cactus) or isinstance(p, Fire):
+                    self.die()
+                else:
+                    if xvel > 0:  # если движется вправо
+                        self.rect.right = p.rect.left  # то не движется вправо
 
-                if xvel > 0:  # если движется вправо
-                    self.rect.right = p.rect.left  # то не движется вправо
+                    if xvel < 0:  # если движется влево
+                        self.rect.left = p.rect.right  # то не движется влево
 
-                if xvel < 0:  # если движется влево
-                    self.rect.left = p.rect.right  # то не движется влево
+                    if yvel > 0:  # если падает вниз
+                        self.rect.bottom = p.rect.top  # то не падает вниз
+                        self.onGround = True  # и становится на что-то твердое
+                        self.yvel = 0  # и энергия падения пропадает
 
-                if yvel > 0:  # если падает вниз
-                    self.rect.bottom = p.rect.top  # то не падает вниз
-                    self.onGround = True  # и становится на что-то твердое
-                    self.yvel = 0  # и энергия падения пропадает
+                    if yvel < 0:  # если движется вверх
+                        self.rect.top = p.rect.bottom  # то не движется вверх
+                        self.yvel = 0  # и энергия прыжка пропадает
 
-                if yvel < 0:  # если движется вверх
-                    self.rect.top = p.rect.bottom  # то не движется вверх
-                    self.yvel = 0  # и энергия прыжка пропадает
+    def teleporting(self, goX, goY):
+        self.rect.x = goX
+        self.rect.y = goY
+
+    def die(self):
+        time.wait(50)
+        self.teleporting(self.startX, self.startY)
