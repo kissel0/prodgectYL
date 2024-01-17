@@ -15,4 +15,4 @@ class Cactus(Platform):
     def teleporting(self, goX, goY):
         self.rect.x = goX
         self.rect.y = goY
-
+# ,,
