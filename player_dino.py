@@ -8,7 +8,7 @@ MOVE_SPEED = 7
 WIDTH = 22
 HEIGHT = 32
 COLOR = "#888888"
-JUMP_POWER = 10
+JUMP_POWER = 6
 GRAVITY = 0.35  # Сила, которая будет тянуть нас вниз
 ANIMATION_DELAY = 0.1
 

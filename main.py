@@ -8,7 +8,6 @@ from cactuses import *
 from fire import *
 from door import *
 
-
 pygame.init()
 fps = 60
 clock = pygame.time.Clock()
@@ -16,6 +15,7 @@ width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
 lvl_image = pygame.image.load("images/fon_level.png")
 monsters = pygame.sprite.Group()
+
 
 class Camera(object):
     def __init__(self, camera_func, width, height):
@@ -41,11 +41,13 @@ def camera_configure(camera, target_rect):
 
     return Rect(l, t, w, h)
 
+
 def terminate():
     pygame.quit()
     sys.exit()
 
-def main():
+
+def main(level_choise):
     new_screen = pygame.display.set_mode((800, 250))
     pygame.init()  # Инициация PyGame, обязательная строчка
     bg = Surface((800, 250))  # Создание видимой поверхности
@@ -60,15 +62,65 @@ def main():
 
     entities.add(hero)
 
-    level = [
+    level_1 = [
         "                                                                                                                        ",
         "                                                                                                                        ",
         "                                                                                                                        ",
         "                                                                                                                        ",
         "                     /                                 --------                       ----------       /                ",
         "                   ------                                                                            --------           ",
-        "    ------ *                        --------                        *---------                                   @      ",
+        "    ------ *                        --------                        *---------                                        @ ",
         "------------------------------------------------------------------------------------------------------------------------"]
+    level_2 = [
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                           ------------           -----                                                 ",
+        "                             --------------------------           -----                                                 ",
+        "            -------------------------------------------   ////    ----- *             ----                            @ ",
+        "------------------------------------------------------------------------------------------------------------------------"]
+
+    level_3 = [
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                       ----                             ",
+        "                                                                                     ** ---                             ",
+        "       --------              ----------                                   --------------                                ",
+        "                  -------        /   / -----             ------------                            -------              @ ",
+        "------------------------------------------------------------------------------------------------------------------------"]
+
+    level_4 = [
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                         ----                                                           ",
+        "               ------         -------            ------------        ----------                                         ",
+        "        ------------- ******          ---------               / / /                ------           *                 @ ",
+        "------------------------------------------------------------------------------------------------------------------------"]
+
+    level_5 = [
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                                                                                                                        ",
+        "                             *                                                                                          ",
+        "                       -------------------           ---------------                                                    ",
+        "     ------------- /   /                 /  /     -------------------------- /           *       *                    @ ",
+        "------------------------------------------------------------------------------------------------------------------------"]
+
+    if level_choise == 1:
+        level = level_1
+    elif level_choise == 2:
+        level = level_2
+    elif level_choise == 3:
+        level = level_3
+    elif level_choise == 4:
+        level = level_4
+    elif level_choise == 5:
+        level = level_5
 
     timer = pygame.time.Clock()
     x = y = 0  # координаты
@@ -166,7 +218,15 @@ def draw_menu(screen):
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.pos[0] >= 47 and event.pos[0] <= 134 and event.pos[1] >= 155 and event.pos[1] <= 240:
-                    main()
+                    main(1)
+                elif event.pos[0] >= 140 and event.pos[0] <= 227 and event.pos[1] >= 245 and event.pos[1] <= 340:
+                    main(2)
+                elif event.pos[0] >= 267 and event.pos[0] <= 344 and event.pos[1] >= 165 and event.pos[1] <= 270:
+                    main(3)
+                elif event.pos[0] >= 370 and event.pos[0] <= 487 and event.pos[1] >= 320 and event.pos[1] <= 370:
+                    main(4)
+                elif event.pos[0] >= 500 and event.pos[0] <= 650 and event.pos[1] >= 170 and event.pos[1] <= 250:
+                    main(5)
         # Update.
 
         # Draw.
