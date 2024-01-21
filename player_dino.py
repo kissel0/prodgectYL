@@ -8,7 +8,7 @@ MOVE_SPEED = 7
 WIDTH = 22
 HEIGHT = 32
 COLOR = "#888888"
-JUMP_POWER = 6
+JUMP_POWER = 7
 GRAVITY = 0.35  # Сила, которая будет тянуть нас вниз
 ANIMATION_DELAY = 0.1
 
@@ -19,6 +19,7 @@ ANIMATION_RIGHT = [('images/Pink_Monster.png'),
 class Player(sprite.Sprite):
     def __init__(self, x, y):
         sprite.Sprite.__init__(self)
+        self.win_image = pygame.image.load('win.jpg')
         self.xvel = 0  # скорость перемещения. 0 - стоять на месте
         self.startX = x  # Начальная позиция Х, пригодится когда будем переигрывать уровень
         self.startY = y
@@ -81,6 +82,7 @@ class Player(sprite.Sprite):
         for p in platforms:
             if sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
                 if isinstance(p, Door):
+
                     draw_menu(screen)
                 if isinstance(p, Cactus) or isinstance(p, Fire):
                     self.die()
@@ -100,10 +102,11 @@ class Player(sprite.Sprite):
                         self.rect.top = p.rect.bottom  # то не движется вверх
                         self.yvel = 0  # и энергия прыжка пропадает
 
-    def teleporting(self, goX, goY):
-        self.rect.x = goX
-        self.rect.y = goY
+    def teleporting(self):
+        self.rect.x = self.startX
+        self.rect.y = self.startY
 
     def die(self):
         time.wait(50)
-        self.teleporting(self.startX, self.startY)
+        self.teleporting()
+

@@ -53,14 +53,10 @@ def main(level_choise):
     bg = Surface((800, 250))  # Создание видимой поверхности
     # будем использовать как фон
     bg.fill(Color(176, 224, 230))  # Заливаем поверхность сплошным цветом
-    hero = Player(55, 55)  # создаем героя по (x,y) координатам
     left = right = False  # по умолчанию - стоим
     up = False
-
     entities = pygame.sprite.Group()  # Все объекты
     platforms = []  # то, во что мы будем врезаться или опираться
-
-    entities.add(hero)
 
     level_1 = [
         "                                                                                                                        ",
@@ -76,9 +72,9 @@ def main(level_choise):
         "                                                                                                                        ",
         "                                                                                                                        ",
         "                                                                                                                        ",
-        "                                           ------------           -----                                                 ",
-        "                             --------------------------           -----                                                 ",
-        "            -------------------------------------------   ////    ----- *             ----                            @ ",
+        "                                           -------------        -------                                                 ",
+        "                             ---------------------------          -----                                                 ",
+        "            --------------------------------------------  ////  / ----- *             ----                            @ ",
         "------------------------------------------------------------------------------------------------------------------------"]
 
     level_3 = [
@@ -110,7 +106,7 @@ def main(level_choise):
         "                       -------------------           ---------------                                                    ",
         "     ------------- /   /                 /  /     -------------------------- /           *       *                    @ ",
         "------------------------------------------------------------------------------------------------------------------------"]
-
+    level = level_1
     if level_choise == 1:
         level = level_1
     elif level_choise == 2:
@@ -121,7 +117,8 @@ def main(level_choise):
         level = level_4
     elif level_choise == 5:
         level = level_5
-
+    hero = Player(55, 55)  # создаем героя по (x,y) координатам
+    entities.add(hero)
     timer = pygame.time.Clock()
     x = y = 0  # координаты
     for row in level:  # вся строка
@@ -153,7 +150,7 @@ def main(level_choise):
 
     camera = Camera(camera_configure, total_level_width, total_level_height)
 
-    while 1:  # Основной цикл программы
+    while True:  # Основной цикл программы
         timer.tick(60)
         for event in pygame.event.get():  # Обрабатываем события
             if event.type == QUIT:
@@ -175,13 +172,13 @@ def main(level_choise):
 
         camera.update(hero)  # центризируем камеру относительно персонажа
         hero.update(left, right, up, platforms)  # передвижение
-        # entities.draw(screen) # отображение
         for event in entities:
             new_screen.blit(event.image, camera.apply(event))
 
         pygame.display.update()  # обновление и вывод всех изменений на экран
-
-
+        if hero.rect[0] > 3748:
+            draw_menu(screen)
+            break
 def draw_screensaver(screen):
     screen.fill((194, 237, 206))  # изменить цвет
     font = pygame.font.Font(None, 50)
@@ -203,7 +200,7 @@ def draw_screensaver(screen):
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.pos[0] >= 250 and event.pos[0] <= 400 and event.pos[1] >= 250 and event.pos[1] <= 300:
-                    return
+                    draw_menu(screen)
 
         pygame.display.flip()
         clock.tick(fps)
@@ -236,4 +233,3 @@ def draw_menu(screen):
 
 if __name__ == "__main__":
     draw_screensaver(screen)
-    draw_menu(screen)
