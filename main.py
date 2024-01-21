@@ -15,6 +15,8 @@ width, height = 640, 480
 screen = pygame.display.set_mode((width, height))
 lvl_image = pygame.image.load("images/fon_level.png")
 monsters = pygame.sprite.Group()
+win_image = pygame.image.load('win.jpg')
+win_image = pygame.transform.scale(win_image, (640, 480))
 
 
 class Camera(object):
@@ -45,6 +47,14 @@ def camera_configure(camera, target_rect):
 def terminate():
     pygame.quit()
     sys.exit()
+
+
+def win():
+    win_screen = pygame.display.set_mode((640, 480))
+    win_screen.blit(win_image, (0, 0))
+    pygame.display.flip()
+    time.wait(1000)
+    draw_menu()
 
 
 def main(level_choise):
@@ -176,9 +186,11 @@ def main(level_choise):
             new_screen.blit(event.image, camera.apply(event))
 
         pygame.display.update()  # обновление и вывод всех изменений на экран
-        if hero.rect[0] > 3748:
-            draw_menu(screen)
+        if hero.rect[0] > 3749:
+            win()
             break
+
+
 def draw_screensaver(screen):
     screen.fill((194, 237, 206))  # изменить цвет
     font = pygame.font.Font(None, 50)
@@ -200,13 +212,13 @@ def draw_screensaver(screen):
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.pos[0] >= 250 and event.pos[0] <= 400 and event.pos[1] >= 250 and event.pos[1] <= 300:
-                    draw_menu(screen)
+                    draw_menu()
 
         pygame.display.flip()
         clock.tick(fps)
 
 
-def draw_menu(screen):
+def draw_menu():
     screen = pygame.display.set_mode((640, 480))
     while True:
         screen.blit(lvl_image, (0, 0))
