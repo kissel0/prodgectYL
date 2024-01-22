@@ -146,7 +146,7 @@ def main(level_choise):
                 entities.add(dr)
                 platforms.append(dr)
             if col == '/':
-                mn = Fire(x, y, 2, 3, 150, 15)
+                mn = Fire(x, y)
                 entities.add(mn)
                 platforms.append(mn)
                 monsters.add(mn)
