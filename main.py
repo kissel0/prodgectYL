@@ -17,6 +17,9 @@ lvl_image = pygame.image.load("images/fon_level.png")
 monsters = pygame.sprite.Group()
 win_image = pygame.image.load('win.jpg')
 win_image = pygame.transform.scale(win_image, (640, 480))
+pygame.mixer.music.load('music_game.mp3')
+ruels_image = pygame.image.load("Ruels.jpg")
+ruels_image = pygame.transform.scale(ruels_image, (640, 480))
 
 
 class Camera(object):
@@ -99,22 +102,22 @@ def main(level_choise):
 
     level_4 = [
         "                                                                                                                        ",
+        " ------                                                                                                                 ",
         "                                                                                                                        ",
-        "                                                                                                                        ",
-        "                                            -----                                                                       ",
+        "             ---------                                                                                                  ",
         "                         -----------                     ----                                                           ",
-        "               ------                  /     /   -------------       ----------                                         ",
-        "        ------------- ******          ---------               / / /                ------           *                 @ ",
+        "                                       /     /   -------------       ----------                                         ",
+        "     ******                           ---------               / / /                ------           *                 @ ",
         "------------------------------------------------------------------------------------------------------------------------"]
 
     level_5 = [
         "                                                                                                                        ",
         "                                                                                                                        ",
-        "                                           --------              /                                                      ",
-        "                              ------                       ---------                                                    ",
-        "                             * * * *                 -                                     ----------   ----   ---      ",
+        " -----------                               --------              /                                                      ",
+        "         *             -      ------                       ---------                                                    ",
+        "         --   -----      *   * * * *                 -  *       *                          ----------   ----   ---      ",
         "                       -------------------           ---------------       ---       ----                               ",
-        "     ------------- /   /                 /  /      **---------------            /        *       *   *    *  *   /    @ ",
+        "     * * * * * * * /   /                 /  /      **---------------   *        /        *       *   *    *  *   /    @ ",
         "------------------------------------------------------------------------------------------------------------------------"]
     level = level_1
     if level_choise == 1:
@@ -127,7 +130,7 @@ def main(level_choise):
         level = level_4
     elif level_choise == 5:
         level = level_5
-    hero = Player(55, 55)  # создаем героя по (x,y) координатам
+    hero = Player(55, 0)  # создаем героя по (x,y) координатам
     entities.add(hero)
     timer = pygame.time.Clock()
     x = y = 0  # координаты
@@ -159,6 +162,7 @@ def main(level_choise):
     total_level_height = len(level) * PLATFORM_HEIGHT  # высоту
 
     camera = Camera(camera_configure, total_level_width, total_level_height)
+    pygame.mixer.music.play(-1)
 
     while True:  # Основной цикл программы
         timer.tick(60)
@@ -178,6 +182,11 @@ def main(level_choise):
                 right = False
             if event.type == KEYUP and event.key == K_LEFT:
                 left = False
+            if event.type == pygame.KEYDOWN and event.key == K_c:
+                pygame.mixer.music.pause()
+            if event.type == pygame.KEYDOWN and event.key == K_x:
+                pygame.mixer.music.unpause()
+
         new_screen.blit(bg, (0, 0))  # Каждую итерацию необходимо всё перерисовывать
 
         camera.update(hero)  # центризируем камеру относительно персонажа
@@ -195,9 +204,11 @@ def draw_screensaver(screen):
     screen.fill((194, 237, 206))  # изменить цвет
     font = pygame.font.Font(None, 50)
     font2 = pygame.font.Font(None, 35)
+    font3 = pygame.font.Font(None, 25)
 
     text = font.render("Hello. These are Dino-Cats", True, (0, 0, 0))  # изменить цвет надписи и её саму
     text2 = font2.render("Start Game", True, (0, 0, 0))
+    text_ruels = font3.render('Правила', True, (0, 0, 0))
     text_x = width // 2 - text.get_width() // 2
     text_y = height // 2 - text.get_height() // 2 - 50
     text_w = text.get_width()
@@ -205,6 +216,7 @@ def draw_screensaver(screen):
     pygame.draw.rect(screen, (150, 200, 170), ((250, 250), (150, 50)), 0)
     screen.blit(text, (text_x, text_y))
     screen.blit(text2, (260, 260))
+    screen.blit(text_ruels, (550, 50))
 
     while True:
         for event in pygame.event.get():
@@ -213,13 +225,27 @@ def draw_screensaver(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.pos[0] >= 250 and event.pos[0] <= 400 and event.pos[1] >= 250 and event.pos[1] <= 300:
                     draw_menu()
+                if event.pos[0] >= 550 and event.pos[0] <= 670 and event.pos[1] >= 50 and event.pos[1] <= 70:
+                    draw_ruels()
 
+        pygame.display.flip()
+        clock.tick(fps)
+
+
+def draw_ruels():
+    nscreen = pygame.display.set_mode((640, 480))
+    while True:
+        nscreen.blit(ruels_image, (0, 0))
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                draw_screensaver(screen)
         pygame.display.flip()
         clock.tick(fps)
 
 
 def draw_menu():
     screen = pygame.display.set_mode((640, 480))
+    pygame.mixer.music.pause()
     while True:
         screen.blit(lvl_image, (0, 0))
         for event in pygame.event.get():
