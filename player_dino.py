@@ -1,3 +1,4 @@
+import pygame.transform
 from pygame import *
 import pyganim
 from cactuses import *
@@ -35,6 +36,11 @@ class Player(sprite.Sprite):
             boltAnim.append((anim, ANIMATION_DELAY))
         self.boltAnimRight = pyganim.PygAnimation(boltAnim)
         self.boltAnimRight.play()
+        boltAnim = []
+        for anim in ANIMATION_RIGHT:
+            boltAnim.append((anim, ANIMATION_DELAY))
+        self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
+        self.boltAnimLeft.play()
         #        Анимация движения влево
         self.boltAnimStay = pyganim.PygAnimation([('images/Pink_Monster.png', 0.1)])
         self.boltAnimStay.play()
@@ -42,6 +48,9 @@ class Player(sprite.Sprite):
 
         self.boltAnimJumpRight = pyganim.PygAnimation([('images/Pink_Monster_Climb_4.png', 0.1)])
         self.boltAnimJumpRight.play()
+
+        self.boltAnimJumpLeft = pyganim.PygAnimation([('images/Pink_Monster_Climb_4.png', 0.1)])
+        self.boltAnimJumpLeft.play()
 
         self.boltAnimJump = pyganim.PygAnimation([('images/Pink_Monster_Jump_8.png', 0.1)])
         self.boltAnimJump.play()
@@ -61,6 +70,14 @@ class Player(sprite.Sprite):
                 self.boltAnimJumpRight.blit(self.image, (0, 0))
             else:
                 self.boltAnimRight.blit(self.image, (0, 0))
+        if left:
+            self.image = pygame.transform.rotate(self.image, 180)
+            self.xvel = -MOVE_SPEED  # Лево = x- n
+            self.image.fill(Color(COLOR))
+            if up:  # для прыжка влево есть отдельная анимация
+                self.boltAnimJumpLeft.blit(self.image, (0, 0))
+            else:
+                self.boltAnimLeft.blit(self.image, (0, 0))
 
         if not (left or right):  # стоим, когда нет указаний идти
             self.xvel = 0
@@ -106,7 +123,7 @@ class Player(sprite.Sprite):
         self.rect.y = self.startY
 
     def die(self):
-        time.wait(50)
+        time.wait(100)
         self.teleporting()
 
 
